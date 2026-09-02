@@ -1,0 +1,352 @@
+[
+  {
+    "category": "Algorithms",
+    "question": "What is Ensemble Learning in machine learning?",
+    "answerHint": "Ensemble Learning is a machine learning approach that improves overall prediction accuracy and robustness by combining the predictions of multiple models.",
+    "difficulty": 2,
+    "company": "Huawei"
+  },
+  {
+    "category": "Algorithms",
+    "question": "What are GBDT, XGBoost, Random Forest, and LightGBM? How do their principles and differences compare?",
+    "answerHint": "Random Forest is a parallel tree model based on bagging. GBDT is a sequential boosting model that fits residuals with gradient-boosted decision trees. XGBoost and LightGBM are efficient GBDT variants: XGBoost improves accuracy with second-order gradients and regularization, while LightGBM improves speed and memory usage with histogram-based splitting and a leaf-wise growth strategy.",
+    "difficulty": 3,
+    "company": "Huawei"
+  },
+  {
+    "category": "Algorithms",
+    "question": "In causal attention inside a Transformer, where do Q, K, and V come from, and how is the mask implemented?",
+    "answerHint": "In decoder self-attention, Q, K, and V are linear projections of the current hidden states X: Q=XWQ, K=XWK, and V=XWV. After computing S=QK^T/sqrt(d), add a causal upper-triangular mask filled with negative infinity, optionally combined with a padding mask, then compute softmax(S+mask)V so each position can only attend to itself and earlier tokens.",
+    "difficulty": 2,
+    "company": "ByteDance"
+  },
+  {
+    "category": "Algorithms",
+    "question": "How do you write binary and multiclass cross-entropy, and how do you implement them with numerical stability in production?",
+    "answerHint": "Binary and multiclass cross-entropy operate on probabilities produced from logits through sigmoid or softmax. For numerical stability, compute the losses directly from logits with BCEWithLogits or log-softmax, and use max-subtraction plus log1p or expm1 to avoid overflow and underflow.",
+    "difficulty": 3,
+    "company": "ByteDance"
+  },
+  {
+    "category": "Algorithms",
+    "question": "Walk through the overall structure of a Transformer or decoder-only model. What does each component do, and what common variants exist?",
+    "answerHint": "A Transformer or decoder-only model is a stacked neural network for autoregressive sequence modeling. Its core components are masked self-attention and feed-forward network layers, connected with residual paths and layer normalization to learn strong sequence representations and generate outputs. Common variants optimize the attention mechanism, positional encoding, normalization placement, and activation functions to improve efficiency, stability, and long-context handling.",
+    "difficulty": 4,
+    "company": "ByteDance"
+  },
+  {
+    "category": "Algorithms",
+    "question": "How would you choose among PEFT methods such as LoRA, QLoRA, Prefix Tuning, Prompt Tuning, and Adapters? What are your practical tips for stable training?",
+    "answerHint": "Use LoRA as the default. Choose QLoRA when GPU memory is tight or when training a large model on a single card. Choose Adapters when you need very small parameter additions and task-level hot swapping. Use Prefix or Prompt Tuning for quick few-shot adaptation without changing model weights. For stable training, prefer a small learning rate, layered freezing, robust optimization, bfloat16 where available, gradient clipping, cosine decay, and moderate dropout.",
+    "difficulty": 3,
+    "company": "ByteDance"
+  },
+  {
+    "category": "Algorithms",
+    "question": "What is the difference between a B-tree and a B+ tree?",
+    "answerHint": "Both B-trees and B+ trees are balanced multi-way search trees. The key difference is where data is stored and how well range queries are supported.\n\nData location: In a B-tree, every node, including root, internal, and leaf nodes, stores keys and either data or data pointers. In a B+ tree, only leaf nodes store full data; internal nodes store keys for indexing only.\nRange queries: B+ tree leaf nodes are linked, often as a doubly linked list, which makes range scans and ordered traversal efficient. A B-tree needs tree traversal for range queries and may involve more disk I/O.\nTree height: Because B+ tree internal nodes do not store data, each disk page can hold more keys, giving the tree a higher fan-out, lower height, and more stable I/O cost.\nIn databases such as MySQL InnoDB, B+ trees are the preferred index structure.",
+    "difficulty": 2,
+    "company": "ByteDance"
+  },
+  {
+    "category": "Algorithms",
+    "question": "Briefly describe the time complexity of hash lookup.",
+    "answerHint": "Hash lookup time complexity:\n\nAverage case: O(1). With a good hash function, the target bucket can be located directly and no traversal is needed.\nWorst case: O(n). If all elements collide into the same bucket, lookup degrades into scanning a collision chain.\nKey factors include hash function quality, load factor, and the collision-resolution strategy, such as chaining or open addressing.",
+    "difficulty": 2,
+    "company": "ByteDance"
+  },
+  {
+    "category": "Algorithms",
+    "question": "How is ConcurrentHashMap implemented?",
+    "answerHint": "ConcurrentHashMap is a high-performance thread-safe hash table in the Java concurrency package. In JDK 1.8, its implementation changed from segmented locking to bucket-level locking plus lock-free operations.\n\n1. JDK 1.7: segmented locks. The structure used a Segment array, where each Segment was essentially a small hash table extending ReentrantLock. Operations only locked the target Segment. The downside was coarse lock granularity and limited concurrency after the Segment array was initialized.\n2. JDK 1.8: bucket-level locks and CAS. The structure returned to Node[] plus linked lists or red-black trees. CAS is used for table initialization and inserting the first node in a bucket. When collisions occur, synchronized locks only the current bucket head. Volatile fields on Node values and next pointers allow lock-free reads with visibility guarantees.\n3. Optimizations include cooperative resizing, LongAdder-style segmented counters through CounterCell, and treeification into red-black trees when a bucket chain becomes long enough, keeping lookup near O(log n) under heavy collisions.",
+    "difficulty": 3,
+    "company": "Tencent"
+  },
+  {
+    "category": "Algorithms",
+    "question": "What is the difference between new and malloc?",
+    "answerHint": "Core differences:\nNature: new is a C++ operator supported by the compiler, while malloc is a C standard library function from <cstdlib>.\nReturn value: new returns a typed pointer, so it is type-safe. malloc returns void* and usually requires an explicit cast in C++.\nConstruction and destruction: new allocates memory and calls the constructor. malloc only allocates raw memory. delete calls the destructor, while free does not.\nMemory-management details:\nSize calculation: new computes the required size from the type. malloc requires the caller to pass the byte count, often using sizeof.\nFailure handling: new throws std::bad_alloc by default, while malloc returns NULL.\nOverloading: new and delete can be overloaded by classes; malloc cannot.",
+    "difficulty": 3,
+    "company": "Tencent"
+  },
+  {
+    "category": "Algorithms",
+    "question": "What is the underlying logic of a red-black tree?",
+    "answerHint": "A red-black tree is a self-balancing binary search tree maintained by five properties:\n\n1. Each node is either red or black.\n2. The root is black.\n3. NIL leaves are black.\n4. A red node must have black children.\n5. Every path from a node to descendant NIL leaves contains the same number of black nodes.\nThe balancing mechanism relies on color constraints, rotations, and recoloring during insertions and deletions. Search, insert, and delete are all O(log n). Red-black trees trade strict balance for fewer rotations, which often makes them faster than AVL trees for insertion-heavy and deletion-heavy workloads.",
+    "difficulty": 3,
+    "company": "Tencent"
+  },
+  {
+    "category": "Algorithms",
+    "question": "Explain bubble sort.",
+    "answerHint": "Basic idea: Bubble sort repeatedly scans an array, compares adjacent elements, and swaps them when they are in the wrong order. Larger elements gradually move, or bubble, toward the end of the array.\n\nSteps:\n1. Start from the first element and compare each adjacent pair.\n2. If the previous element is greater than the next one, swap them.\n3. Continue until the end of the array.\n4. Repeat the process; each pass fixes one maximum element in its final position.",
+    "difficulty": 2,
+    "company": "Tencent"
+  },
+  {
+    "category": "Algorithms",
+    "question": "Introduce max-heaps and min-heaps.",
+    "answerHint": "Max-heap:\nA complete binary tree where each parent is greater than or equal to its children. The root is the maximum element.\n\nMin-heap:\nA complete binary tree where each parent is less than or equal to its children. The root is the minimum element.",
+    "difficulty": 2,
+    "company": "Tencent"
+  },
+  {
+    "category": "Algorithms",
+    "question": "Why must TCP use a three-way handshake to establish a connection instead of two handshakes?",
+    "answerHint": "There are three main reasons:\n1. Prevent stale connection requests from wasting server resources. If an old SYN is delayed in the network and later arrives after the real connection has already completed and closed, a two-way handshake would let the server treat it as a new established connection and wait for data from a client that has already closed.\n2. Confirm that both sides can send and receive. The first handshake lets the server know the client can send and the server can receive. The second lets the client confirm both directions for itself and the server's send capability. The third lets the server confirm that its outbound path and the client's receive path work.\n3. Synchronize both initial sequence numbers. TCP reliability depends on sequence numbers. Three handshakes ensure each side has exchanged and acknowledged the other's ISN.",
+    "difficulty": 3,
+    "company": "Alibaba"
+  },
+  {
+    "category": "Algorithms",
+    "question": "Explain the basic principle and prerequisites of binary search.",
+    "answerHint": "Binary search is an efficient search algorithm for finding a target in a sorted array.\n\nPrinciple: It uses divide and conquer to repeatedly halve the search interval. Set left and right boundaries, compute mid, compare target with nums[mid], then shrink the interval to the left or right half until the target is found or the interval is empty.\nPrerequisites: The data must be ordered, either ascending or descending, and the structure must support O(1) random access. Therefore binary search is suitable for arrays and array-backed lists, but not for linked lists, where accessing the middle node costs O(n).",
+    "difficulty": 3,
+    "company": "Alibaba"
+  },
+  {
+    "category": "System Design",
+    "question": "Why is training usually done on GPUs rather than CPUs? Explain using compute models and memory bandwidth.",
+    "answerHint": "GPUs provide massive parallel compute through many simple cores, while high memory bandwidth keeps data flowing efficiently. This matches the matrix-heavy workloads of deep learning training, so GPUs are the primary training hardware. CPUs are better suited to serial logic such as data loading and control flow.",
+    "difficulty": 4,
+    "company": "Huawei"
+  },
+  {
+    "category": "System Design",
+    "question": "Describe what you know about the JVM memory model.",
+    "answerHint": "The JVM runtime memory areas include the heap for object instances, the method area for class metadata and constants, the VM stack for per-thread method calls, the native method stack for native calls, and the program counter for each thread's execution position. The heap and method area are shared across threads, while stacks and program counters are thread-private. Direct memory is managed outside the heap.",
+    "difficulty": 2,
+    "company": "Meituan"
+  },
+  {
+    "category": "System Design",
+    "question": "Explain optimistic locking and pessimistic locking.",
+    "answerHint": "Optimistic locking assumes conflicts are rare and checks whether data has changed only at commit time, often using a version number. It works well for read-heavy workloads. Pessimistic locking acquires a lock first, such as a row lock or table lock, to guarantee exclusive access. It fits write-heavy scenarios but reduces concurrency. Optimistic locking reduces lock contention, while pessimistic locking offers stronger immediate consistency.",
+    "difficulty": 2,
+    "company": "Meituan"
+  },
+  {
+    "category": "System Design",
+    "question": "What transaction isolation levels are available?",
+    "answerHint": "MySQL provides four transaction isolation levels: Read Uncommitted, Read Committed, Repeatable Read, which is MySQL's default, and Serializable. They increase consistency from low to high, while concurrency generally decreases.",
+    "difficulty": 3,
+    "company": "Meituan"
+  },
+  {
+    "category": "System Design",
+    "question": "How do you create a thread pool, and what common parameters does it have?",
+    "answerHint": "A Java thread pool can be created with ThreadPoolExecutor or the Executors utility class. Common parameters include core pool size, maximum pool size, keep-alive time for idle non-core threads, task queue, and rejection policy when the queue is full.",
+    "difficulty": 3,
+    "company": "ByteDance"
+  },
+  {
+    "category": "System Design",
+    "question": "Explain the usage and principle of synchronized.",
+    "answerHint": "synchronized controls multi-threaded access to shared resources. It can modify a method or a code block and uses a specified lock object for mutual exclusion. Internally it is based on the object's monitor lock. A thread acquires the lock on entry and releases it on exit, while OS mutexes and memory barriers help guarantee atomicity and visibility. The JVM can optimize lock states such as biased locking and lightweight locking.",
+    "difficulty": 3,
+    "company": "Xiaohongshu"
+  },
+  {
+    "category": "System Design",
+    "question": "Explain the class loading mechanism.",
+    "answerHint": "The class loading mechanism is the JVM process for dynamically loading classes. It includes loading, verification, preparation, resolution, and initialization. Loading reads the .class file and creates a Class object. Verification checks bytecode validity. Preparation allocates memory for static variables and assigns default values. Resolution converts symbolic references to direct references. Initialization runs static blocks and assignments. These stages ensure classes are loaded correctly and safely.",
+    "difficulty": 3,
+    "company": "Xiaohongshu"
+  },
+  {
+    "category": "System Design",
+    "question": "Why does MySQL use B+ trees for indexes?",
+    "answerHint": "MySQL uses B+ trees because they support efficient range queries, ordered traversal, and disk I/O optimization. Linked leaf nodes make range scans and sequential access efficient. A low tree height reduces disk I/O, which is important for large datasets. B+ trees also support both equality queries and range queries effectively.",
+    "difficulty": 3,
+    "company": "Xiaohongshu"
+  },
+  {
+    "category": "System Design",
+    "question": "Briefly explain the CAP theorem, and which two properties Kafka satisfies.",
+    "answerHint": "CAP says a distributed system cannot perfectly satisfy Consistency, Availability, and Partition Tolerance at the same time; under a network partition, it must trade off C and A.\n1. Consistency: all nodes see the same data at the same time.\n2. Availability: every request receives a non-error response within a bounded time, though the data may not be the newest.\n3. Partition Tolerance: the system keeps operating when communication between nodes is interrupted.\nKafka is often considered CA when the network is healthy and CP under partitions when consistency is prioritized. By default it leans toward CP through ISR and min.insync.replicas, allowing only synchronized replicas to become leader and preferring to stop service over losing committed data. It can be configured closer to AP by enabling unclean leader election, which preserves availability at the risk of data loss.",
+    "difficulty": 4,
+    "company": "Tencent"
+  },
+  {
+    "category": "System Design",
+    "question": "What are the advantages and differences among common rate-limiting algorithms?",
+    "answerHint": "Fixed-window counter: simple and clear, but can allow traffic bursts at window boundaries.\nSliding window: solves the boundary burst problem and produces more accurate statistics, but is more complex because it tracks multiple time slices.\nLeaky bucket: smooths traffic at a constant output rate and protects downstream systems, but cannot absorb bursts well.\nToken bucket: allows a controlled amount of burst traffic while still enforcing an average rate, but requires maintaining token state.",
+    "difficulty": 4,
+    "company": "Tencent"
+  },
+  {
+    "category": "System Design",
+    "question": "Discuss the differences between Consul and ZooKeeper.",
+    "answerHint": "Key differences between Consul and ZooKeeper:\n1. Consistency protocol: ZooKeeper uses ZAB for strong consistency as a CP system. Consul uses Raft and also provides strong consistency.\n2. Service discovery: ZooKeeper uses ephemeral nodes and requires clients to maintain long connections. Consul provides health checks and service-registration APIs, with multi-datacenter support.\n3. Data model: ZooKeeper uses a hierarchical tree similar to file-system paths. Consul provides key-value storage plus a service catalog.\n4. Health checks: ZooKeeper relies mainly on client heartbeats. Consul includes HTTP, TCP, script, and other checks.\n5. Multi-datacenter: ZooKeeper usually requires separate clusters. Consul supports datacenter federation natively.\n6. Use cases: ZooKeeper fits distributed coordination, configuration, and locks. Consul fits service discovery, configuration, and health checking in microservice architectures.",
+    "difficulty": 3,
+    "company": "Alibaba"
+  },
+  {
+    "category": "System Design",
+    "question": "Why are HTTP calls usually not the first choice for communication and function calls between nodes in distributed systems? Can HTTP still be used?",
+    "answerHint": "HTTP and RPC are both common communication styles in distributed systems, but they differ in design, performance, and service governance.\n1. Protocol level and transfer efficiency: HTTP is an application-layer protocol, often based on HTTP/1.1. It commonly sends text formats such as JSON or XML, carries relatively heavy headers, and requires full parsing. RPC often uses TCP or HTTP/2 with binary serialization such as Protobuf or Thrift, reducing payload size and parsing cost.\n2. Calling experience: HTTP is resource-oriented, so callers manage URLs, methods, and headers explicitly. RPC is procedure-oriented and lets developers call remote methods in a style similar to local calls.\n3. Service governance: HTTP often relies on gateways or Nginx for load balancing and has looser service discovery. RPC frameworks such as Dubbo or gRPC usually include registration, discovery, load balancing, circuit breaking, rate limiting, and retries.\nHTTP can absolutely be used, especially for public APIs and cross-boundary integrations. For large-scale internal microservice calls, RPC is often preferred for performance, strong contracts through IDL, and built-in governance.",
+    "difficulty": 4,
+    "company": null
+  },
+  {
+    "category": "Project Experience",
+    "question": "Briefly introduce a recent project you worked on, including its goal, your role on the team, and your main responsibilities.",
+    "answerHint": "Use the STAR method. Start with the business context and goal, then define your responsibilities clearly. Focus on specific challenges, such as high concurrency or data consistency, and explain the technical solutions you used, such as distributed locks or message-driven architecture. Finish with measurable outcomes to show both engineering ability and business awareness.",
+    "difficulty": 3,
+    "company": null
+  },
+  {
+    "category": "Project Experience",
+    "question": "When a project hits a performance bottleneck, how do you usually locate and solve the problem?",
+    "answerHint": "Be data-driven: do not guess; look at metrics and profiling data.\nWork layer by layer: network, gateway, application code, database, and cache.\nApply the 80/20 rule: most performance issues often come from a small number of slow queries or inefficient loops.\nWatch tail latency: focus on P99 and P999, not only averages, because averages hide extreme stalls.",
+    "difficulty": 3,
+    "company": null
+  },
+  {
+    "category": "Project Experience",
+    "question": "Which project improved your abilities the most? Describe the main difficulty, how you solved it, and what you learned.",
+    "answerHint": "Use the STAR method: Situation, Task, Action, and Result. Emphasize your problem-solving logic and your ability to review and summarize lessons after the work.",
+    "difficulty": 3,
+    "company": null
+  },
+  {
+    "category": "Project Experience",
+    "question": "If you were responsible for an urgent activity with limited resources, how would you overcome the difficulties?",
+    "answerHint": "This evaluates adaptability under pressure, project-management ability across schedule, cost, and quality, and results-oriented thinking. Key points: 1. Trade-offs: in extreme situations, prioritize completeness over perfection. 2. Communication: manage expectations upward and motivate the team downward. 3. Execution: details determine quality, while big-picture judgment determines survival.",
+    "difficulty": 4,
+    "company": null
+  },
+  {
+    "category": "Project Experience",
+    "question": "Have you encountered delays or requirement changes in a project? How did you manage and respond to them?",
+    "answerHint": "This checks pressure resistance, project-management awareness, especially understanding the scope-time-cost triangle, and communication in complex business settings. A strong approach is transparent communication, data-driven decisions, dynamic adjustment, and closed-loop follow-up.",
+    "difficulty": 4,
+    "company": null
+  },
+  {
+    "category": "Project Experience",
+    "question": "When you need to learn something quickly during an internship or project, how do you handle it? Describe a specific example.",
+    "answerHint": "This evaluates self-learning, pressure resistance, and structured problem solving. The key is whether you can quickly identify the core logic of an unfamiliar technical area and produce useful results.\n1. Problem analysis: fast learning is not blind learning. In the workplace, the goal is to solve a problem.\n2. Learning path: use official docs or high-quality articles to build the big picture, run a demo to verify concepts, then dig into pain points based on business needs.\n3. Summary and reuse: turn scattered knowledge into reusable utilities or documents.\n4. Methodology: prioritize core topics first, ask experts after independent thinking, and validate learning through running code and performance tests.",
+    "difficulty": 2,
+    "company": null
+  },
+  {
+    "category": "Project Experience",
+    "question": "During requirement review, if you find a logic flaw in the PRD, what is your standard process? Explain with data such as defect density.",
+    "answerHint": "This evaluates initiative during the requirement phase, process discipline, and data-supported decision making. Finding PRD logic flaws during review is a core value of shift-left testing.\n1. Record and classify: document logical conflicts, missing boundaries, or incomplete reverse flows in the review notes, and estimate their impact on backend logic, frontend interaction, and test coverage.\n2. Collaborate: confirm the original intent with the PM to avoid mistaking misunderstanding for a flaw, and discuss technical feasibility with developers.\n3. Standardized feedback with data: for example, if an order flow lacks retry logic after inventory locking fails, use defect-density prediction to explain that one missed requirement flaw can cost 5-10 times more to fix during integration testing. Finding three core flaws early may prevent a large increase in bug density after test submission.\n4. Close the loop: ask the PM to update the PRD, publish the revised version, and update test analysis documents and mind maps accordingly.",
+    "difficulty": 3,
+    "company": null
+  },
+  {
+    "category": "Project Experience",
+    "question": "Using an Ele.me order flow as an example, explain the business scenarios used in the project.",
+    "answerHint": "An Ele.me order flow is a typical O2O scenario involving multiple clients, high concurrency, and strong real-time requirements. It covers the full lifecycle from user entry to after-sales feedback.\n1. Traffic entry and discovery: use LBS to retrieve valid merchants within a nearby radius, and use Elasticsearch plus user profiles for dish or merchant search and personalized recommendations.\n2. Transaction path: shopping cart and promotion calculation, including discounts, coupons, packaging fees, and dynamic delivery fees. Order submission needs token or idempotency checks to prevent duplicate orders. Payment integrates Alipay, WeChat Pay, and callback handling.\n3. Fulfillment and dispatch: assign orders to riders based on location, load, and route planning. Use WebSocket or long polling to show rider location and ETA in real time.\n4. After-sales and data loop: ratings affect merchant ranking, while refunds and complaints require coordination with payment platforms for original-route refunds.",
+    "difficulty": 4,
+    "company": null
+  },
+  {
+    "category": "Project Experience",
+    "question": "What optimization opportunities do you see in your project, and where would you start if you continued improving it?",
+    "answerHint": "Project optimization is a systematic process: find the bottleneck, identify the cause, implement the solution, and verify the effect. In an interview, discuss it across four dimensions: performance, stability, security, and developer efficiency.",
+    "difficulty": 3,
+    "company": null
+  },
+  {
+    "category": "Project Experience",
+    "question": "How do you avoid risks in a project?",
+    "answerHint": "Project risk management runs through the full project lifecycle and centers on prevention and response.\n1. Identify and analyze risks through brainstorming, retrospectives, and expert interviews. Consider technical risks, management risks, and external risks. Estimate probability and impact; high-probability and high-impact risks need priority handling.\n2. Four response strategies: avoid by changing the plan or goal, mitigate by reducing probability or impact, transfer by assigning responsibility to a third party or using mature cloud services, and accept low-probability low-impact risks with contingency reserves.\n3. Monitor and adjust: maintain a risk register, review risks at milestones such as before release, and capture lessons after the project as organizational knowledge.",
+    "difficulty": 2,
+    "company": null
+  },
+  {
+    "category": "Project Experience",
+    "question": "How do you understand the business of software in the context of its industry background?",
+    "answerHint": "Software business is not just writing code. It requires understanding the market, users, technology, and business model.\n1. Industry context shapes requirements. Finance cares about security and real-time behavior, while healthcare emphasizes data accuracy and privacy.\n2. The business model drives priorities, such as subscriptions or usage-based billing.\n3. User value is central: requirements analysis and UX design turn technology into value users can feel.\n4. Compliance and risk management are survival requirements in regulated industries.\n5. Technology such as AI and big data enables innovation and expands business boundaries.",
+    "difficulty": 2,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "What are your hobbies?",
+    "answerHint": "When discussing hobbies in a behavioral interview, build a clear answer that shows genuine personal interests while also reflecting relevant skills or values.",
+    "difficulty": 2,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "What is most important in your life right now?",
+    "answerHint": "Focus on authentic personal values and your current life state instead of trying to please the interviewer. Avoid vague answers. Share a specific personal example to make the answer vivid and credible.",
+    "difficulty": 2,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "How do you understand the role you are applying for?",
+    "answerHint": "Structure your answer around several areas:\n1. Responsibilities: study the job description and identify the core responsibilities, daily tasks, goals, and required skills.\n2. Required skills and abilities: identify the hard skills, such as technical ability, and soft skills, such as communication and teamwork, needed to succeed.\n3. Team and company culture: understand the team structure and culture, and explain how you would work effectively in that environment.\n4. Industry context: consider industry characteristics and trends to understand the role's competitive environment and growth opportunities.\n5. Career development: connect the role to your career goals and explain why you are interested and how you can contribute.",
+    "difficulty": 3,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "Are your skills more suitable for this job or for other roles?",
+    "answerHint": "Use this structure:\n1. Self-assessment: briefly introduce your core skills and experience, emphasizing relevance to the role.\n2. Examples: choose one or two concrete examples showing how you used these skills to solve problems or achieve goals.\n3. Comparison: if other roles are possible, mention how your skills could also help there, but explain what makes this role distinctive and why you fit it better.\n4. Summary: reinforce your enthusiasm for the role and your willingness to keep learning and growing.",
+    "difficulty": 4,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "Tell me about the most frustrating experience in your past work.",
+    "answerHint": "Organize your answer with this structure:\n1. Situation: describe the specific work context, such as a project, task, or period.\n2. Frustration: explain clearly what went wrong, such as failed delivery, unmet expectations, or communication barriers.\n3. Response and action: explain your immediate reaction and what you did next, including analysis, solutions, strategy adjustment, or seeking help.\n4. Lessons learned: reflect on the experience and share what you gained, such as problem-solving skills, teamwork, or emotional management.\n5. Growth: explain how the frustration helped you improve and how you applied the lesson later.",
+    "difficulty": 3,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "Why should we choose you from among many candidates?",
+    "answerHint": "Build your answer from these points:\n1. Professional skills and experience: highlight relevant skills and successful examples that show your ability to solve problems.\n2. Unique strengths: explain what distinguishes you from other candidates, such as collaboration, leadership, or adaptability, and how those traits create value for the team.\n3. Culture fit: show your understanding of the company culture and how you can integrate with the team and support company goals.\n4. Positive attitude and learning ability: emphasize your willingness to improve and take on new challenges.\n5. Passion for the role: explain your career goals in this position and the impact you hope to create.",
+    "difficulty": 4,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "How much do you know about our company?",
+    "answerHint": "Use this structure:\n1. Company background: mention founding history, core business, and industry position.\n2. Products and services: describe main products or services and their market performance.\n3. Culture: discuss values and working atmosphere, and explain how you fit them.\n4. Recent updates: mention recent news, projects, or partnerships to show research.\n5. Personal interest: share your interest in the company's future direction or a specific area.",
+    "difficulty": 3,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "What is your future career positioning and development plan?",
+    "answerHint": "The core logic of career planning is to begin with the end in mind and reach it in stages. Define the final goal, such as becoming a technical expert or business expert, then work backward to key milestones such as integrating in year one, deepening expertise by year three, and enabling others by year five. Emphasize growing yourself while creating value for the company.",
+    "difficulty": 3,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "What salary range would you accept?",
+    "answerHint": "Salary discussion is a conversation about value alignment. Give a reasonable range with supporting logic and show openness to the full compensation package and career growth. Through professional communication and timely questions, respect the company's budget while making your market value clear.",
+    "difficulty": 3,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "How do you usually plan the process of learning a new technology?",
+    "answerHint": "A strong learning process is goal-oriented and practice-driven. First, use official documentation to run a demo and build an overview of the core concepts. Next, apply the technology in a real scenario and deepen understanding while solving bugs and performance issues. Finally, write a blog post or give a technical sharing session to review and systematize the knowledge. Learning through practice and feedback turns new technology into real problem-solving ability.",
+    "difficulty": 3,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "When do you expect to start, and how long do you plan to stay?",
+    "answerHint": "For start date, follow the principle of respecting process while actively cooperating. If currently employed, a one-month handover period shows professionalism, while you can also express willingness to coordinate for an earlier start. For duration, focus on your recognition of the company's platform and business prospects, and emphasize that you are seeking long-term career development.",
+    "difficulty": 2,
+    "company": null
+  },
+  {
+    "category": "Behavioral",
+    "question": "How would you handle a public argument or conflict with someone else?",
+    "answerHint": "In a public conflict, prioritize maintaining a professional team atmosphere and protecting project progress. Stop the situation from escalating, then communicate privately in depth. Stay focused on the issue rather than the person, and turn the conflict into an opportunity to improve the collaboration process.",
+    "difficulty": 4,
+    "company": null
+  }
+]
