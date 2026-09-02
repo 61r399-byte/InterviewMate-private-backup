@@ -97,13 +97,6 @@ app/src/main/java/com/example/interviewmate/
   util/                              # InterviewConstants, DateUtils
 ```
 
-## Team
-
-| Member | Role | Responsibilities |
-|---|---|---|
-| Wu Sipeng | Full-stack Dev | All Kotlin code, architecture, DB, ReportEngine, tests |
-| Nie wenfang | Docs + Data | Documentation, competitive analysis, seed data |
-| Lu Huaen | Demo + Testing | PPT, demo video, app testing |
 
 ## License
 
